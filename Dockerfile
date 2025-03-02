@@ -1,8 +1,9 @@
 FROM gradle:7.4-jdk17 AS build
 WORKDIR /app
 COPY build.gradle settings.gradle /app/
+RUN gradle clean # Clean the project
 COPY src /app/src
-RUN gradle build --no-daemon
+RUN gradle build --no-daemon --info
 
 FROM amazoncorretto:17-alpine-jdk
 WORKDIR /app
