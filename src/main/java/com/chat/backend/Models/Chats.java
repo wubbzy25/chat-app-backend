@@ -15,5 +15,7 @@ public class Chats {
 
     public Chats() {
         this.idChat = UUID.randomUUID().toString();
+        this.participants = List.of();
+        this.messages = List.of();
     }
 }

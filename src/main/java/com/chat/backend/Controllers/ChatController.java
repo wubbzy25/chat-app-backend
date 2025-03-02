@@ -52,6 +52,16 @@ public class ChatController {
         return new ResponseEntity<>(chatService.GetUserInformation(idUser), HttpStatus.OK);
     }
 
+    @GetMapping("GetMessages")
+    public ResponseEntity<?> getMessages(@RequestParam String chatId ) {
+        return new ResponseEntity<>(chatService.getMessages(chatId), HttpStatus.OK);
+    }
+
+    @GetMapping("GetLastMessage")
+    public ResponseEntity<?> getLastMessage(@RequestParam String chatId) {
+        return new ResponseEntity<>(chatService.GetLastMessage(chatId), HttpStatus.OK);
+    }
+
     @GetMapping("SearchUsers")
     public ResponseEntity<?> getUser(@RequestParam String query, @RequestParam String idUser) {
         return new ResponseEntity<>(chatService.SearchUsers(query, idUser), HttpStatus.OK);
