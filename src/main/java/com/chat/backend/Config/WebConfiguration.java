@@ -9,7 +9,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://chat-app-backend-9q4s.onrender.com")
+                .allowedOrigins("https://chat-app-sable-pi-20.vercel.app")
                 .allowedMethods("*")
                 .allowCredentials(true)
                 .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH", "OPTIONS");
