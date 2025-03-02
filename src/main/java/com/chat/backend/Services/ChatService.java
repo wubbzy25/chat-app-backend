@@ -3,6 +3,8 @@ package com.chat.backend.Services;
 import com.chat.backend.DTO.ChatRequestDTO;
 import com.chat.backend.DTO.ChatResponseDTO;
 import com.chat.backend.DTO.MessageRequestDTO;
+import com.chat.backend.Exceptions.ChatNotFoundException;
+import com.chat.backend.Exceptions.UserNotFoundException;
 import com.chat.backend.Models.Chats;
 import com.chat.backend.Models.Messages;
 import com.chat.backend.Models.Users;
@@ -42,6 +44,10 @@ public class ChatService {
     this.mongoTemplate = mongoTemplate;
     }
     public List<Chats> getChats(String IdUser) {
+        Optional<Users> userOptional = userRepository.findByIdUser(IdUser);
+        if(userOptional.isEmpty()){
+            throw new UserNotFoundException();
+        }
         List<Chats> chats = chatRepository.findByParticipantsContaining(IdUser);
         return chats.stream()
                 .peek(chat -> chat.setParticipants(
@@ -53,9 +59,10 @@ public class ChatService {
     }
 
     public void SaveMessage(String chatId, MessageRequestDTO message){
+
        Optional<Chats> chatOptional = chatRepository.findByIdChat(chatId);
        if(chatOptional.isEmpty()){
-           throw new RuntimeException("Chat not found");
+           throw new ChatNotFoundException();
        }
         Messages newMessage = new Messages();
         newMessage.setMessage(message.getMessage());
@@ -72,7 +79,7 @@ public class ChatService {
     public List<Messages> getMessages(String chatId) {
         Optional<Chats> chatOptional = chatRepository.findByIdChat(chatId);
         if(chatOptional.isEmpty()){
-            throw new RuntimeException("Chat not found");
+            throw new ChatNotFoundException();
         }
         Chats chat = chatOptional.get();
         return chat.getMessages();
@@ -81,7 +88,7 @@ public class ChatService {
     public String GetLastMessage(String chatId){
         Optional<Chats> chatOptional = chatRepository.findByIdChat(chatId);
         if(chatOptional.isEmpty()){
-            throw new RuntimeException("Chat not found");
+            throw new ChatNotFoundException();
         }
         Chats chat = chatOptional.get();
         List<Messages> messages = chat.getMessages();
@@ -92,7 +99,6 @@ public class ChatService {
     }
 
     public List<Users> getUsers(String idUser) {
-
         List<Users> Users = userRepository.findAll();
         Collections.shuffle(Users);
         return Users.stream().limit(5).filter(user -> !user.getIdUser().equals(idUser)).collect(Collectors.toList());}
@@ -104,7 +110,11 @@ public class ChatService {
 
 
     public Users GetUserInformation(String idUser) {
-      return userRepository.findByIdUser(idUser).orElse(null);
+        Optional<Users> userOptional = userRepository.findByIdUser(idUser);
+        if(userOptional.isEmpty()){
+            throw new UserNotFoundException();
+        }
+       return userOptional.get();
     }
 
     public ChatResponseDTO createChat(ChatRequestDTO chatRequestDTO, HttpServletRequest request) {

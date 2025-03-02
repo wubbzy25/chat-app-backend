@@ -31,6 +31,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getExceptionResponseDTO("401", "unauthorized, missing token", "JwtTokenMissing", request), HttpStatus.UNAUTHORIZED) ;
     }
 
+    @ExceptionHandler(ChatNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDTO> handleChatNotFoundException(ChatNotFoundException ex, HttpServletRequest request) {
+
+        return new ResponseEntity<>(getExceptionResponseDTO("404", "chat not found", "ChatNotFoundException", request), HttpStatus.NOT_FOUND) ;
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDTO> handleUserNotFoundException(UserNotFoundException ex, HttpServletRequest request) {
+        return new ResponseEntity<>(getExceptionResponseDTO("404", "user not found", "UserNotFoundException", request), HttpStatus.NOT_FOUND) ;
+    }
+
     private ExceptionResponseDTO getExceptionResponseDTO(String code, String message, String exception, HttpServletRequest request){
         ExceptionResponseDTO response = new ExceptionResponseDTO();
         response.setTimestamp(dateFormatted.getDate());

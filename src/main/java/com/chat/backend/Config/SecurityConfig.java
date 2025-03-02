@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint))
                 .authorizeHttpRequests(request -> {
-                    request.requestMatchers("api/v1/auth/**").permitAll();
+                    request.requestMatchers("/api/v1/auth/**").permitAll();
                     request.requestMatchers("/chat/**").permitAll();
                     request.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     request.anyRequest().authenticated();
@@ -49,7 +49,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of("https://chat-app-sable-pi-20.vercel.app/"));
         configuration.setAllowedMethods(List.of("HEAD",
                 "GET", "POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowCredentials(true);
